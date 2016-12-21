@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: {lat: -34.6098208, lng: -58.3948001},
+          mapTypeId: 'roadmap'
+        });
+
+
+// var script = document.createElement('script');
+//       script.src = 'asiya1.json';
+//       document.getElementsByTagName('head')[0].appendChild(script);
+//         window.json_callback = function(results) {
+//           for (var i = 0; i < results.features.length; i++) {
+//             var coords = results.features[i].geometry.coordinates;
+//             var latLng = new google.maps.LatLng(coords[1],coords[0]);
+//             var prop1 = String(results.features[i].properties.property1);
+//             add_marker(i, latLng, prop1);
+//           }
+//         }
+//
+//         function add_marker(id, point, text) {
+//           var marker = new google.maps.Marker({map: map, position: point, animation: google.maps.Animation.DROP, clickable: true});
+//           // marker.addListener('click', toggleBounce);
+//           var info_window = new google.maps.InfoWindow({
+//               content: text
+//           });
+//               function toggleBounce() {
+//             if (marker.getAnimation() !== null) {
+//               marker.setAnimation(null);
+//             } else {
+//               marker.setAnimation(google.maps.Animation.BOUNCE);
+//             }
+//           }
+//           google.maps.event.addListener(marker, 'click', function() {
+//             event.feature.getProperty('name');
+//             info_window.open(this.getMap(), this);
+//           });
+//
+//           return marker;
+//         }
+
+        // var firstLAyer = new google.mapsTransitLayer({});
+        // transitLAyer.setMap(map);
+
+        // Create a <script> tag and set the geojson data as the source.
+        var script = document.createElement('script');
+        script.src = 'asiya.json';
+        document.getElementsByTagName('head')[0].appendChild(script);
+
+        map.data.setStyle(function(feature) {
+          var magnitude = feature.getProperty('width');
+          return {
+            icon: getCircle(magnitude)
+          };
+        });
+        // map.data.setStyle(function(feature) {
+        //   var mag2 = feature.getProperty('height');
+        //   return {
+        //     icon: getCircle1(mag2)
+        //   };
+        // });
+        // 
+        // map.data.loadGeoJson(
+        //     'sotheby.json');
+      }
+
+      function getCircle(magnitude) {
+        return {
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: 'red',
+          fillOpacity: .2,
+          scale: Math.pow(2, magnitude) / .7,
+          strokeColor: 'black',
+          strokeWeight: 3
+        };
+      }
+      // function getCircle1(mag2) {
+      //   return {
+      //     path: google.maps.SymbolPath.CIRCLE,
+      //     fillColor: 'red',
+      //     fillOpacity: .2,
+      //     scale: Math.pow(2, mag2) / 3,
+      //     strokeColor: 'white',
+      //     strokeWeight: .5
+      //   };
+      // }
+
+      function json_callback(results) {
+        map.data.addGeoJson(results);
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzwzeFWZWXmHAiV8DRAW39cKibr8EQmvw&callback=initMap">
+    </script>
+  </body>
+</html>
